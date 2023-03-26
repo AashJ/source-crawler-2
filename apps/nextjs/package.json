@@ -1,5 +1,5 @@
 {
-  "name": "@/nextjs",
+  "name": "@acme/nextjs",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,10 +12,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@/api": "*",
-    "@/auth": "*",
-    "@/db": "*",
-    "@/tailwind-config": "*",
+    "@acme/api": "*",
+    "@acme/auth": "*",
+    "@acme/db": "*",
+    "@acme/tailwind-config": "*",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
     "@trpc/next": "^10.18.0",
@@ -29,7 +29,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@/eslint-config": "*",
+    "@acme/eslint-config": "*",
     "@types/node": "^18.15.9",
     "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",

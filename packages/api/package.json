@@ -1,5 +1,5 @@
 {
-  "name": "@/api",
+  "name": "@acme/api",
   "version": "0.1.0",
   "main": "./index.ts",
   "types": "./index.ts",
@@ -11,15 +11,15 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@/auth": "*",
-    "@/db": "*",
+    "@acme/auth": "*",
+    "@acme/db": "*",
     "@trpc/client": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "superjson": "1.9.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@/eslint-config": "*",
+    "@acme/eslint-config": "*",
     "eslint": "^8.36.0",
     "typescript": "^5.0.2"
   }
