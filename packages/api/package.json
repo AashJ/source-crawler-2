@@ -1,5 +1,5 @@
 {
-  "name": "@acme/api",
+  "name": "@sc/api",
   "version": "0.1.0",
   "main": "./index.ts",
   "types": "./index.ts",
@@ -11,15 +11,21 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@acme/auth": "*",
-    "@acme/db": "*",
+    "@pinecone-database/pinecone": "^0.0.11",
+    "@sc/auth": "*",
+    "@sc/db": "*",
     "@trpc/client": "^10.18.0",
     "@trpc/server": "^10.18.0",
+    "crawler": "^1.4.0",
+    "langchain": "^0.0.41",
+    "lodash": "^4.17.21",
     "superjson": "1.9.1",
     "zod": "^3.21.4"
   },
   "devDependencies": {
-    "@acme/eslint-config": "*",
+    "@sc/eslint-config": "*",
+    "@types/crawler": "^1.2.2",
+    "@types/lodash": "^4.14.191",
     "eslint": "^8.36.0",
     "typescript": "^5.0.2"
   }
