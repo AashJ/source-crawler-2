@@ -7,12 +7,12 @@
  * The pieces you will need to use are documented accordingly near the end
  */
 
-import { getServerSession, type Session } from "@sc/auth";
-import { prisma } from "@sc/db";
 import { TRPCError, initTRPC } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import superjson from "superjson";
 import { ZodError } from "zod";
+
+import { prisma } from "@sc/db";
 
 /**
  * 1. CONTEXT
@@ -23,9 +23,7 @@ import { ZodError } from "zod";
  * processing a request
  *
  */
-type CreateContextOptions = {
-  session: Session | null;
-};
+type CreateContextOptions = {};
 
 /**
  * This helper generates the "internals" for a tRPC context. If you need to use
@@ -38,7 +36,6 @@ type CreateContextOptions = {
  */
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
-    session: opts.session,
     prisma,
   };
 };
@@ -49,14 +46,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * @link https://trpc.io/docs/context
  */
 export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts;
-
-  // Get the session from the server using the unstable_getServerSession wrapper function
-  const session = await getServerSession({ req, res });
-
-  return createInnerTRPCContext({
-    session,
-  });
+  return createInnerTRPCContext({});
 };
 
 /**
