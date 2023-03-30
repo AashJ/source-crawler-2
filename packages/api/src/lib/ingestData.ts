@@ -5,14 +5,19 @@ import { PineconeStore } from "langchain/vectorstores";
 import chunk from "lodash/chunk";
 
 const PINECONE_INDEX_NAME = "source-crawler";
-const PINECONE_NAME_SPACE = "test";
+const PINECONE_NAME_SPACE = "playwright";
 
-export const ingestData = async (text: string) => {
+type Metadata = {
+  source: string;
+};
+
+export const ingestData = async (text: string, metadata: Metadata) => {
   console.log("===========INGESTING DATA==========");
   const pinecone = new PineconeClient();
   await pinecone.init({
-    apiKey: process.env.PEINCONE_API_KEY ?? "", //this is in the dashboard
-    environment: process.env.PINECONE_ENVIRONMENT ?? "",
+    apiKey: "b256841a-5839-4575-ad6c-2b43e8272f39",
+    environment: "us-east1-gcp",
+    // environment: process.env.PINECONE_ENVIRONMENT ?? "",
   });
 
   try {

@@ -3,6 +3,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import { api } from "~/utils/api";
+import { Button } from "~/components/design-system/Button";
+import { Input } from "~/components/design-system/Input";
 
 const Home: NextPage = () => {
   const [url, setUrl] = useState("");
@@ -22,28 +24,27 @@ const Home: NextPage = () => {
             Source Crawler
           </h1>
 
-          <input
+          <Input
             onChange={(e) => {
               setUrl(e.target.value);
             }}
             value={url}
           />
-          <button
+          <Button
             onClick={() => {
               void crawlMutation.mutate({ url });
             }}
           >
             Crawl
-          </button>
-          <h2>Message</h2>
-          <input value={message} onChange={(e) => setMessage(e.target.value)} />
-          <button
+          </Button>
+          <Input value={message} onChange={(e) => setMessage(e.target.value)} />
+          <Button
             onClick={() => {
               sendMessageMutation.mutate({ message });
             }}
           >
             message
-          </button>
+          </Button>
           {sendMessageMutation.isLoading ? (
             <p>loading...</p>
           ) : (

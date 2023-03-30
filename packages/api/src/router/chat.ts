@@ -24,7 +24,7 @@ export const chatRouter = createTRPCRouter({
 
       const vectorStore = await PineconeStore.fromExistingIndex(
         new OpenAIEmbeddings(),
-        { pineconeIndex: index, namespace: "test" },
+        { pineconeIndex: index, namespace: "playwright" },
       );
 
       const qaChain = makeQAChain(vectorStore);
