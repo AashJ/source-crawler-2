@@ -24,7 +24,7 @@ const Home: NextPage = () => {
             Source Crawler
           </h1>
 
-          <Input
+          {/* <Input
             onChange={(e) => {
               setUrl(e.target.value);
             }}
@@ -36,7 +36,7 @@ const Home: NextPage = () => {
             }}
           >
             Crawl
-          </Button>
+          </Button> */}
           <Input value={message} onChange={(e) => setMessage(e.target.value)} />
           <Button
             onClick={() => {
