@@ -5,6 +5,11 @@ import { PineconeStore } from "langchain/vectorstores";
 
 import { makeQAChain } from "@sc/api";
 
+export const config = {
+  runtime: "edge",
+  // this is a pre-requisite
+};
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
