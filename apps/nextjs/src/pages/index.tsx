@@ -7,10 +7,35 @@ import { Button } from "~/components/design-system/Button";
 import { Input } from "~/components/design-system/Input";
 
 const Home: NextPage = () => {
-  const [url, setUrl] = useState("");
   const [message, setMessage] = useState("");
-  const crawlMutation = api.crawler.createIndexes.useMutation();
   const sendMessageMutation = api.chat.sendMessage.useMutation();
+  const [response, setResponse] = useState("");
+
+  const handleSendMessage = async () => {
+    setResponse("");
+    console.log(message);
+    const response = await fetch("/api/chat", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify({ question: message, history: [] }),
+    });
+
+    const data = response.body;
+    if (!data) return;
+
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+    let done = false;
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setResponse((prev) => prev + chunkValue);
+    }
+  };
 
   return (
     <>
@@ -38,23 +63,8 @@ const Home: NextPage = () => {
             Crawl
           </Button> */}
           <Input value={message} onChange={(e) => setMessage(e.target.value)} />
-          <Button
-            onClick={() => {
-              sendMessageMutation.mutate({ message });
-            }}
-          >
-            message
-          </Button>
-          {sendMessageMutation.isLoading ? (
-            <p>loading...</p>
-          ) : (
-            <>
-              <p>{sendMessageMutation.data?.text}</p>
-              <p>
-                sources: {JSON.stringify(sendMessageMutation.data?.documents)}
-              </p>
-            </>
-          )}
+          <Button onClick={handleSendMessage}>message</Button>
+          <p>{response}</p>
         </div>
       </main>
     </>
