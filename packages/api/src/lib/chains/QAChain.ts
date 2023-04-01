@@ -16,6 +16,7 @@ const QA_PROMPT = PromptTemplate.fromTemplate(
 You should only provide hyperlinks that reference the context below. Do NOT make up hyperlinks.
 If you can't find the answer in the context below, just say "Hmm, I'm not sure." Don't try to make up an answer.
 If the question is not related to the context, politely respond that you are tuned to only answer questions that are related to the context.
+Answer the question in the tone of the related context.
 Question: {question}
 =========
 {context}

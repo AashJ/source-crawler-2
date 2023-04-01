@@ -28,6 +28,7 @@ importers:
 
   apps/nextjs:
     specifiers:
+      '@microsoft/fetch-event-source': ^2.0.1
       '@next/font': ^13.2.4
       '@radix-ui/react-avatar': ^1.0.2
       '@sc/api': '*'
@@ -52,12 +53,14 @@ importers:
       postcss: ^8.4.21
       react: 18.2.0
       react-dom: 18.2.0
+      react-hook-form: ^7.43.9
       superjson: 1.9.1
       tailwind-merge: ^1.11.0
       tailwindcss: ^3.2.7
       typescript: ^5.0.2
       zod: ^3.21.4
     dependencies:
+      '@microsoft/fetch-event-source': 2.0.1
       '@next/font': 13.2.4
       '@radix-ui/react-avatar': 1.0.2_biqbaboplfbrettd7655fr4n2y
       '@sc/api': link:../../packages/api
@@ -74,6 +77,7 @@ importers:
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-hook-form: 7.43.9_react@18.2.0
       superjson: 1.9.1
       tailwind-merge: 1.11.0
       zod: 3.21.4
@@ -832,6 +836,10 @@ packages:
       globby: 11.1.0
       jju: 1.4.0
       read-yaml-file: 1.1.0
+    dev: false
+
+  /@microsoft/fetch-event-source/2.0.1:
+    resolution: {integrity: sha512-W6CLUJ2eBMw3Rec70qrsEW0jOm/3twwJv21mrmj2yORiaVmVYGS4sSS5yUwvQc1ZlDLYGPnClVWmUUMagKNsfA==}
     dev: false
 
   /@next/env/13.2.4:
@@ -5046,6 +5054,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.43.9_react@18.2.0:
+    resolution: {integrity: sha512-AUDN3Pz2NSeoxQ7Hs6OhQhDr6gtF9YRuutGDwPQqhSUAHJSgGl2VeY3qN19MG0SucpjgDiuMJ4iC5T5uB+eaNQ==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

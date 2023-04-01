@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import { cn } from "~/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "../design-system/Avatar";
 
-type ChatMessageSource = {
+export type ChatMessageSource = {
   name: string;
   src: string;
 };
@@ -86,9 +86,10 @@ const ChatMessageSources: FC<ChatMessageSourcesProps> = ({ sources }) => {
             className="flex flex-row items-center text-slate-500"
             href={source.src}
             key={source.src}
+            target="_blank"
+            rel="noreferrer"
           >
             <span>{source.name}</span>
-            <ChevronRight className="h-4 w-4 text-slate-500" />
           </a>
         );
       })}

@@ -5,10 +5,11 @@ import { PineconeStore } from "langchain/vectorstores";
 import chunk from "lodash/chunk";
 
 const PINECONE_INDEX_NAME = "source-crawler";
-const PINECONE_NAME_SPACE = "retool";
+const PINECONE_NAMESPACE = process.env.PINECONE_NAMESPACE ?? "default";
 
 type Metadata = {
   source: string;
+  title: string;
 };
 
 export const ingestData = async (text: string, metadata: Metadata) => {
@@ -39,10 +40,12 @@ export const ingestData = async (text: string, metadata: Metadata) => {
 
     // /* Pinecone recommends a limit of 100 vectors per upsert request to avoid errors*/
     const chunkSize = 50;
+    const metadataArray = [...Array(chunkSize).keys()].map(() => metadata);
+
     chunk(allTexts, chunkSize).forEach((texts) => {
-      void PineconeStore.fromTexts(texts, [], embeddings, {
+      void PineconeStore.fromTexts(texts, metadataArray, embeddings, {
         pineconeIndex: index,
-        namespace: PINECONE_NAME_SPACE,
+        namespace: PINECONE_NAMESPACE,
       });
     });
   } catch (error) {

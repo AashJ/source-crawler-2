@@ -9,7 +9,7 @@ const ChatInput = forwardRef<HTMLInputElement, ChatInputProps>(
     return (
       <input
         className={cn(
-          "w-full rounded-b-md border-t border-gray-300 py-2 px-2",
+          "w-full rounded-b-md border-t border-gray-300 px-4 py-2",
           className,
         )}
         ref={ref}

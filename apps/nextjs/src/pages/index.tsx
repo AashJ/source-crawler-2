@@ -1,53 +1,105 @@
 import { useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 
-import { api } from "~/utils/api";
-import ChatBox from "~/components/Chat/ChatBox";
-import { Button } from "~/components/design-system/Button";
-import { Input } from "~/components/design-system/Input";
+import ChatBox, { type Inputs } from "~/components/Chat/ChatBox";
+import { type Message } from "~/components/Chat/types";
 
 const Home: NextPage = () => {
-  const [message, setMessage] = useState("");
   const [url, setUrl] = useState("");
-  const crawlMutation = api.crawler.createIndexes.useMutation();
-  const [response, setResponse] = useState("");
-  const [sourceDocument, setSourceDocument] = useState(undefined);
 
-  const handleSendMessage = async () => {
-    setResponse("");
-    console.log(message);
-    const response = await fetch("/api/chat", {
-      headers: {
-        "Content-Type": "application/json",
+  const [loading, setLoading] = useState<boolean>(false);
+  const [sourceDocs, setSourceDocs] = useState<Document[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [messages, setMessages] = useState<{
+    messages: Message[];
+    pending?: string;
+    history: [string, string][];
+    pendingSourceDocs?: Document[];
+  }>({
+    messages: [
+      {
+        message: "Welcome to the chatbot! Ask me anything!",
+        type: "reply",
       },
-      method: "POST",
-      body: JSON.stringify({ question: message, history: [] }),
-    });
+    ],
+    history: [],
+    pendingSourceDocs: [],
+  });
 
-    const data = response.body;
-    if (!data) return;
+  function handleSubmit(data: Inputs) {
+    setError(null);
 
-    const reader = data.getReader();
-    const decoder = new TextDecoder();
-    let done = false;
+    const question = data.message.trim();
 
-    while (!done) {
-      const { value, done: doneReading } = await reader.read();
-      done = doneReading;
-      const chunkValue = decoder.decode(value);
-      let isSourceDocs = false;
-      try {
-        // there's probably a much better way to do this
-        const sourceDocuments = JSON.parse(chunkValue);
-        isSourceDocs = true;
-        setSourceDocument(sourceDocuments);
-      } catch (e) {}
-      if (!isSourceDocs) {
-        setResponse((prev) => prev + chunkValue);
-      }
+    setMessages((state) => ({
+      ...state,
+      messages: [
+        ...state.messages,
+        {
+          type: "message",
+          message: question,
+        },
+      ],
+      pending: undefined,
+    }));
+
+    setLoading(true);
+    setMessages((state) => ({ ...state, pending: "" }));
+
+    const ctrl = new AbortController();
+
+    try {
+      void fetchEventSource("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          question,
+          history,
+        }),
+        signal: ctrl.signal,
+        onmessage: (event) => {
+          if (event.data === "[DONE]") {
+            setMessages((state) => ({
+              history: [...state.history, [question, state.pending ?? ""]],
+              messages: [
+                ...state.messages,
+                {
+                  type: "reply",
+                  message: state.pending ?? "",
+                  sourceDocs: state.pendingSourceDocs,
+                },
+              ],
+              pending: undefined,
+              pendingSourceDocs: undefined,
+            }));
+            setLoading(false);
+            ctrl.abort();
+          } else {
+            const data = JSON.parse(event.data);
+            if (data.sourceDocs) {
+              setMessages((state) => ({
+                ...state,
+                pendingSourceDocs: data.sourceDocs,
+              }));
+            } else {
+              setMessages((state) => ({
+                ...state,
+                pending: (state.pending ?? "") + data.data,
+              }));
+            }
+          }
+        },
+      });
+    } catch (error) {
+      setLoading(false);
+      setError("An error occurred while fetching the data. Please try again.");
+      console.log("error", error);
     }
-  };
+  }
 
   return (
     <>
@@ -57,29 +109,8 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <div className="container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8">
-          <Input
-            onChange={(e) => {
-              setUrl(e.target.value);
-            }}
-            value={url}
-          />
-          <Button
-            onClick={() => {
-              void crawlMutation.mutate({ url });
-            }}
-          >
-            Crawl
-          </Button>
-          <Input value={message} onChange={(e) => setMessage(e.target.value)} />
-          <Button onClick={handleSendMessage}>message</Button>
-          <p>{response}</p>
-          <p>
-            {sourceDocument?.sourceDocs.map((document) => (
-              <span>{document.pageContent}</span>
-            ))}
-          </p>
+          <ChatBox messages={messages} onSubmit={handleSubmit} />
         </div>
-        <ChatBox />
       </main>
     </>
   );

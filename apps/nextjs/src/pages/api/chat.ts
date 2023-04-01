@@ -33,7 +33,10 @@ export default async function handler(
 
   const vectorStore = await PineconeStore.fromExistingIndex(
     new OpenAIEmbeddings(),
-    { pineconeIndex: index, namespace: "retool" },
+    {
+      pineconeIndex: index,
+      namespace: process.env.PINECONE_NAMESPACE ?? "default",
+    },
   );
 
   res.writeHead(200, {
@@ -43,12 +46,14 @@ export default async function handler(
   });
 
   const sendData = (data: string) => {
-    res.write(data);
+    res.write(`data: ${data}\n\n`);
   };
+
+  sendData(JSON.stringify({ data: "" }));
 
   //create chain
   const chain = makeQAChain(vectorStore, (token: string) => {
-    sendData(token);
+    sendData(JSON.stringify({ data: token }));
   });
 
   try {
@@ -63,7 +68,7 @@ export default async function handler(
   } catch (error) {
     console.log("error", error);
   } finally {
-    // sendData("[DONE]");
+    sendData("[DONE]");
     res.end();
   }
 }
