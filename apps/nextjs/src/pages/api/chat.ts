@@ -5,10 +5,10 @@ import { PineconeStore } from "langchain/vectorstores";
 
 import { makeQAChain } from "@sc/api";
 
-export const config = {
-  runtime: "edge",
-  // this is a pre-requisite
-};
+// export const config = {
+//   runtime: "edge",
+//   // this is a pre-requisite
+// };
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,7 +33,7 @@ export default async function handler(
 
   const vectorStore = await PineconeStore.fromExistingIndex(
     new OpenAIEmbeddings(),
-    { pineconeIndex: index, namespace: "playwright" },
+    { pineconeIndex: index, namespace: "retool" },
   );
 
   res.writeHead(200, {
@@ -63,7 +63,7 @@ export default async function handler(
   } catch (error) {
     console.log("error", error);
   } finally {
-    sendData("[DONE]");
+    // sendData("[DONE]");
     res.end();
   }
 }

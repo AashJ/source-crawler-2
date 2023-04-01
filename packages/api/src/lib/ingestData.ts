@@ -5,7 +5,7 @@ import { PineconeStore } from "langchain/vectorstores";
 import chunk from "lodash/chunk";
 
 const PINECONE_INDEX_NAME = "source-crawler";
-const PINECONE_NAME_SPACE = "playwright";
+const PINECONE_NAME_SPACE = "retool";
 
 type Metadata = {
   source: string;

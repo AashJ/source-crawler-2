@@ -3,13 +3,16 @@ import type { NextPage } from "next";
 import Head from "next/head";
 
 import { api } from "~/utils/api";
+import ChatBox from "~/components/Chat/ChatBox";
 import { Button } from "~/components/design-system/Button";
 import { Input } from "~/components/design-system/Input";
 
 const Home: NextPage = () => {
   const [message, setMessage] = useState("");
-  const sendMessageMutation = api.chat.sendMessage.useMutation();
+  const [url, setUrl] = useState("");
+  const crawlMutation = api.crawler.createIndexes.useMutation();
   const [response, setResponse] = useState("");
+  const [sourceDocument, setSourceDocument] = useState(undefined);
 
   const handleSendMessage = async () => {
     setResponse("");
@@ -33,7 +36,16 @@ const Home: NextPage = () => {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setResponse((prev) => prev + chunkValue);
+      let isSourceDocs = false;
+      try {
+        // there's probably a much better way to do this
+        const sourceDocuments = JSON.parse(chunkValue);
+        isSourceDocs = true;
+        setSourceDocument(sourceDocuments);
+      } catch (e) {}
+      if (!isSourceDocs) {
+        setResponse((prev) => prev + chunkValue);
+      }
     }
   };
 
@@ -45,11 +57,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <div className="container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8">
-          <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-            Source Crawler
-          </h1>
-
-          {/* <Input
+          <Input
             onChange={(e) => {
               setUrl(e.target.value);
             }}
@@ -61,11 +69,17 @@ const Home: NextPage = () => {
             }}
           >
             Crawl
-          </Button> */}
+          </Button>
           <Input value={message} onChange={(e) => setMessage(e.target.value)} />
           <Button onClick={handleSendMessage}>message</Button>
           <p>{response}</p>
+          <p>
+            {sourceDocument?.sourceDocs.map((document) => (
+              <span>{document.pageContent}</span>
+            ))}
+          </p>
         </div>
+        <ChatBox />
       </main>
     </>
   );
