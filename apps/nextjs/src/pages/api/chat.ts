@@ -3,11 +3,11 @@ import { PineconeClient } from "@pinecone-database/pinecone";
 import { OpenAIEmbeddings } from "langchain/embeddings";
 import { PineconeStore } from "langchain/vectorstores";
 
-import { makeQAChain } from "@sc/api";
+import { makeQAChain } from "~/utils/makeQAChain";
 
+// Langchain doesn't support edge functions yet
 // export const config = {
 //   runtime: "edge",
-//   // this is a pre-requisite
 // };
 
 export default async function handler(

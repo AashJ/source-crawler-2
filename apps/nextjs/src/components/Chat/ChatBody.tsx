@@ -14,8 +14,15 @@ const ChatBody: FC<ChatBodyProps> = ({
   pendingReply,
 }: ChatBodyProps) => {
   return (
-    <div className="h-[500px] space-y-4 overflow-y-scroll rounded-b-md py-2 px-4">
-      {messages.map((message) => {
+    <div className="flex h-[500px] flex-col-reverse overflow-y-scroll rounded-b-md py-2 px-4">
+      {pendingReply && (
+        <ChatMessage
+          variant={"reply"}
+          text={pendingReply}
+          avatar={{ fallback: "T", src: "" }}
+        />
+      )}
+      {[...messages].reverse().map((message) => {
         const thisMessageSources: ChatMessageSource[] = uniqBy(
           message.sourceDocs?.map((source) => {
             const sourceWithMetadata = source as any;
@@ -40,13 +47,6 @@ const ChatBody: FC<ChatBodyProps> = ({
           />
         );
       })}
-      {pendingReply && (
-        <ChatMessage
-          variant={"reply"}
-          text={pendingReply}
-          avatar={{ fallback: "T", src: "" }}
-        />
-      )}
     </div>
   );
 };

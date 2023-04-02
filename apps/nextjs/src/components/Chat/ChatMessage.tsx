@@ -32,17 +32,20 @@ const chatMessageVariants = cva(
   },
 );
 
-const chatMessageContainerVariants = cva("w-100 flex items-end space-x-2", {
-  variants: {
-    variant: {
-      message: "justify-end",
-      reply: "",
+const chatMessageContainerVariants = cva(
+  "w-100 flex items-end space-x-2 mt-4",
+  {
+    variants: {
+      variant: {
+        message: "justify-end",
+        reply: "",
+      },
+    },
+    defaultVariants: {
+      variant: "message",
     },
   },
-  defaultVariants: {
-    variant: "message",
-  },
-});
+);
 
 type Avatar = {
   src: string;
