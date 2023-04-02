@@ -20,7 +20,7 @@ const Home: NextPage = () => {
   }>({
     messages: [
       {
-        message: "Welcome to the chatbot! Ask me anything!",
+        message: "Welcome to Technically – ask any question here",
         type: "reply",
       },
     ],
