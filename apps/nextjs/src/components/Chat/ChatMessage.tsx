@@ -1,6 +1,5 @@
 import { type FC } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { ChevronRight } from "lucide-react";
 
 import { cn } from "~/utils/cn";
 import { Avatar, AvatarFallback, AvatarImage } from "../design-system/Avatar";
@@ -11,9 +10,10 @@ export type ChatMessageSource = {
 };
 
 export type ChatMessageProps = {
-  text: string;
+  text?: string;
   sources?: ChatMessageSource[];
   avatar?: Avatar;
+  loading?: boolean;
 } & VariantProps<typeof chatMessageVariants> &
   React.BaseHTMLAttributes<HTMLDivElement>;
 
@@ -57,6 +57,7 @@ const ChatMessage: FC<ChatMessageProps> = ({
   text,
   sources,
   avatar,
+  loading = false,
   className,
 }: ChatMessageProps) => {
   return (
@@ -68,7 +69,10 @@ const ChatMessage: FC<ChatMessageProps> = ({
         </Avatar>
       )}
       <div className={cn(chatMessageVariants({ variant }), className)}>
-        <span className="p-2">{text}</span>
+        <span className="p-2">
+          {loading && "Loading..."}
+          {text}
+        </span>
         {sources && <ChatMessageSources sources={sources} />}
       </div>
     </div>

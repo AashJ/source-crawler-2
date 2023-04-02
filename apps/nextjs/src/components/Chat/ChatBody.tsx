@@ -18,8 +18,8 @@ const ChatBody: FC<ChatBodyProps> = ({
       {pendingReply && (
         <ChatMessage
           variant={"reply"}
-          text={pendingReply}
           avatar={{ fallback: "T", src: "" }}
+          loading={true}
         />
       )}
       {[...messages].reverse().map((message) => {
