@@ -109,7 +109,11 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <div className="container mt-12 flex flex-col items-center justify-center gap-4 px-4 py-8">
-          <ChatBox messages={messages} onSubmit={handleSubmit} />
+          <ChatBox
+            messages={messages}
+            onSubmit={handleSubmit}
+            loading={loading}
+          />
         </div>
       </main>
     </>

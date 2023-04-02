@@ -7,15 +7,17 @@ import { type Message } from "./types";
 export type ChatBodyProps = {
   messages: Message[];
   pendingReply?: string;
+  loading?: boolean;
 };
 
 const ChatBody: FC<ChatBodyProps> = ({
   messages,
   pendingReply,
+  loading = false,
 }: ChatBodyProps) => {
   return (
     <div className="flex h-[500px] flex-col-reverse overflow-y-scroll rounded-b-md py-2 px-4">
-      {pendingReply && (
+      {(pendingReply || loading) && (
         <ChatMessage
           variant={"reply"}
           avatar={{ fallback: "T", src: "" }}
